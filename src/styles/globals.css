@@ -1,0 +1,179 @@
+:root {
+  --black: #0B0B0B;
+  --white: #ffffff;
+  --gold: #C9A227;
+  --muted: #1a1a1a;
+}
+
+html, body, #__next {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--black);
+  color: var(--white);
+  line-height: 1.6;
+}
+h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+h2 { font-size: 28px; margin: 24px 0; }
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header {
+  background: rgba(11,11,11,0.8);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 22px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav a {
+  margin-left: 24px;
+  color: var(--white);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  font-size: 12px;
+  opacity: 0.8;
+  position: relative;
+}
+.nav a:hover {
+  color: var(--gold);
+  opacity: 1;
+}
+.nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 0;
+  background: var(--gold);
+  transition: width 0.2s ease;
+}
+.nav a:hover::after { width: 100%; }
+
+main.container {
+  padding: 36px 0;
+}
+
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 36px 0;
+  color: #cccccc;
+}
+
+.hero {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(11,11,11,0.4), rgba(11,11,11,0.9));
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+}
+.hero .hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6);
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+.hero .hero-content {
+  position: relative;
+  padding: 48px;
+  max-width: 720px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  line-height: 1.2;
+  margin: 0 0 12px 0;
+}
+.hero p { color: #cccccc; }
+
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary { background: linear-gradient(90deg, #c9a227, #e0c45a); color: var(--black); }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-outline { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+.btn-outline:hover { background: var(--gold); color: var(--black); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (min-width: 600px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.card {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--muted);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.3); }
+.card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.3s ease; }
+.card:hover img { transform: scale(1.05); }
+.card .content { padding: 16px; }
+.card .title { font-family: 'Playfair Display', serif; font-size: 20px; }
+.price { color: var(--gold); font-weight: 600; letter-spacing: 0.3px; }
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--muted);
+  color: var(--white);
+}
+
+.form-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 700px) {
+  .form-row { grid-template-columns: 1fr 1fr; }
+}
+
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border-bottom: 1px solid rgba(255,255,255,0.08); padding: 12px; text-align: left; }
+.table th { text-transform: uppercase; letter-spacing: 1.2px; font-size: 12px; color: #bbbbbb; }
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal-visible { opacity: 1; transform: translateY(0); }
