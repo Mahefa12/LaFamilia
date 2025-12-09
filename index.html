@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Familia - Luxury Streetwear Fashion</title>
+  <meta name="description" content="La Familia blends premium craftsmanship with contemporary street culture." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+  <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+  <style>
+    :root { --gold: #D4AF37; --soft-gold: #F4E4BC; --charcoal: #2C2C2C; }
+    body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .hero-section { background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('Images/sweater.jpg'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; }
+    .gold-accent { color: var(--gold); }
+    .bg-gold { background-color: var(--gold); }
+    .text-gradient { background: linear-gradient(135deg, #D4AF37, #F4E4BC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+    .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .product-card:hover { transform: translateY(-8px) rotateY(2deg); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+    .cart-sidebar { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+    .cart-sidebar.open { transform: translateX(0); }
+    .mobile-menu { transform: translateY(-100%); transition: transform 0.3s ease-in-out; }
+    .mobile-menu.open { transform: translateY(0); }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .splide__arrow { background: rgba(0,0,0,0.8); border: none; border-radius: 50%; }
+    .splide__arrow svg { fill: white; }
+    .nav-link { position: relative; transition: color 0.3s ease; }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background-color: var(--gold); transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+    .btn-primary { background-color: #000000; transition: all 0.2s ease; }
+    .btn-primary:hover { background-color: #2C2C2C; transform: translateY(-2px); }
+    .btn-gold { background-color: #D4AF37; color: #000; transition: all 0.2s ease; }
+    .btn-gold:hover { background-color: #C79A2F; transform: translateY(-2px); }
+    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+    .typed-cursor { color: var(--gold); font-weight: 700; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex-shrink-0">
+          <a href="index.html" class="flex items-center space-x-2">
+            <img src="Images/Logo.jpg" alt="La Familia" class="h-8 w-auto" />
+            <span class="font-playfair text-2xl font-black text-black">La Familia</span>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="nav-link text-black font-medium">Home</a>
+          <a href="shop.html" class="nav-link text-gray-700 hover:text-black font-medium">Shop</a>
+          <a href="about.html" class="nav-link text-gray-700 hover:text-black font-medium">About</a>
+          <a href="contact.html" class="nav-link text-gray-700 hover:text-black font-medium">Contact</a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="mobileMenuBtn" class="md:hidden p-2 text-gray-600 hover:text-black transition-colors" aria-label="Toggle Menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <button id="cartBtn" class="p-2 text-gray-600 hover:text-black transition-colors relative" aria-label="Open Cart">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 13l-1.293 1.293a1 1 0 00-.293.707V16a1 1 0 001 1h12"/><circle cx="9" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>
+            <span class="cart-count absolute -top-1 -right-1 bg-gold text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-3 py-2 text-black font-medium">Home</a>
+        <a href="shop.html" class="block px-3 py-2 text-gray-700 hover:text-black font-medium">Shop</a>
+        <a href="about.html" class="block px-3 py-2 text-gray-700 hover:text-black font-medium">About</a>
+        <a href="contact.html" class="block px-3 py-2 text-gray-700 hover:text-black font-medium">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero-section text-white pt-28 pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-center justify-center text-center min-h-[60vh]">
+        <div class="max-w-3xl">
+          <h1 class="font-playfair text-5xl md:text-7xl font-black mb-6 animate-fade-in-up"><span id="typed-text" class="gold-accent"></span></h1>
+          <p class="text-lg md:text-xl text-gray-200 mb-8 animate-fade-in-up" style="animation-delay:0.15s">Premium craftsmanship meets contemporary street culture.</p>
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <a href="shop.html" class="btn-primary px-8 py-4 rounded-lg text-white font-semibold text-lg inline-flex items-center space-x-2">
+              <span>Shop Collection</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <a href="about.html" class="btn-gold px-8 py-4 rounded-lg font-semibold text-lg inline-flex items-center space-x-2">
+              <span>Learn More</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5-5 5M7 7l5 5-5 5"/></svg>
+            </a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </header>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between mb-8">
+        <h2 class="font-playfair text-4xl md:text-5xl font-bold text-black">Featured Looks</h2>
+      </div>
+      <div class="splide" id="lookbookSlider">
+        <div class="splide__track">
+          <ul class="splide__list">
+            <li class="splide__slide"><img src="Images/sweater.jpg" alt="Sweater" class="rounded-xl shadow-lg w-full h-80 object-cover" /></li>
+            <li class="splide__slide"><img src="Images/Jeans.jpg" alt="Jeans" class="rounded-xl shadow-lg w-full h-80 object-cover" /></li>
+            <li class="splide__slide"><img src="Images/sneaker.jpg" alt="Sneaker" class="rounded-xl shadow-lg w-full h-80 object-cover" /></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between mb-8">
+        <h2 class="font-playfair text-4xl md:text-5xl font-bold text-black">Featured Collection</h2>
+        <a href="shop.html" class="btn-primary px-6 py-3 rounded-lg text-white font-semibold inline-flex items-center space-x-2">
+          <span>View All</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="product-card bg-gray-50 rounded-xl overflow-hidden shadow-sm">
+          <img src="Images/Bag.jpg" alt="Leather Bag" class="w-full h-64 object-cover" />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Leather Bag</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Handcrafted bag with gold accents.</p>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-black font-semibold">$249</span>
+              <button class="btn-gold px-4 py-2 rounded-lg font-semibold add-to-cart" data-id="bag" data-name="Leather Bag" data-price="249" data-image="Images/Bag.jpg">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card bg-gray-50 rounded-xl overflow-hidden shadow-sm">
+          <img src="Images/sneaker.jpg" alt="Sneaker" class="w-full h-64 object-cover" />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Urban Sneaker</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Premium sole with street-ready design.</p>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-black font-semibold">$179</span>
+              <button class="btn-gold px-4 py-2 rounded-lg font-semibold add-to-cart" data-id="sneaker" data-name="Urban Sneaker" data-price="179" data-image="Images/sneaker.jpg">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card bg-gray-50 rounded-xl overflow-hidden shadow-sm">
+          <img src="Images/Jeans.jpg" alt="Jeans" class="w-full h-64 object-cover" />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Tailored Jeans</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Contemporary fit with classic durability.</p>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-black font-semibold">$139</span>
+              <button class="btn-gold px-4 py-2 rounded-lg font-semibold add-to-cart" data-id="jeans" data-name="Tailored Jeans" data-price="139" data-image="Images/Jeans.jpg">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card bg-gray-50 rounded-xl overflow-hidden shadow-sm">
+          <img src="Images/sweater.jpg" alt="Sweater" class="w-full h-64 object-cover" />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Luxury Sweater</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Soft-touch knit with gold accent detail.</p>
+            <div class="flex items-center justify-between mt-4">
+              <span class="text-black font-semibold">$159</span>
+              <button class="btn-gold px-4 py-2 rounded-lg font-semibold add-to-cart" data-id="sweater" data-name="Luxury Sweater" data-price="159" data-image="Images/sweater.jpg">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="font-playfair text-4xl md:text-5xl font-bold mb-6">Our Story</h2>
+          <p class="text-gray-700 mb-6">La Familia was born from the belief that luxury fashion should be accessible to the bold and ambitious generation. We blend premium craftsmanship with contemporary street culture, creating pieces that speak to those who refuse to compromise on style or quality.</p>
+          <p class="text-gray-700 mb-6">Every collection tells a story of urban sophistication, where traditional luxury meets modern expression. We're not just selling clothes; we're building a community of like-minded individuals who understand that fashion is a language of self-expression.</p>
+          <a href="about.html" class="btn-gold px-8 py-4 rounded-lg font-semibold inline-flex items-center space-x-2">
+            <span>Learn More</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden shadow-lg">
+          <img src="Images/Bag.jpg" alt="Craftsmanship" class="w-full h-full object-cover" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="font-playfair text-4xl md:text-5xl font-bold text-black mb-4">Stay Connected</h2>
+        <p class="text-gray-700">Join the community and get early access to drops.</p>
+      </div>
+      <form id="newsletterForm" class="max-w-xl mx-auto flex gap-3">
+        <input type="email" required placeholder="Your email" class="flex-1 border rounded-lg px-4 py-3" />
+        <button type="submit" class="btn-primary px-6 py-3 rounded-lg text-white font-semibold">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-playfair text-4xl md:text-5xl font-bold text-black mb-4">Follow Our Journey</h2>
+      <p class="text-gray-700 mb-6">Behind-the-scenes content and exclusive previews.</p>
+      <a href="https://instagram.com/lafamilia" target="_blank" class="btn-gold px-6 py-3 rounded-lg font-semibold inline-flex items-center space-x-2">
+        <span>Instagram</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="bg-black text-gray-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <a href="index.html" class="flex items-center space-x-2 mb-4">
+            <img src="Images/Logo.jpg" alt="La Familia" class="h-8 w-auto" />
+            <span class="font-playfair text-2xl font-black text-white">La Familia</span>
+          </a>
+          <p class="text-sm">Luxury streetwear for the bold and ambitious.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="shop.html" class="hover:text-white">Shop</a></li>
+            <li><a href="about.html" class="hover:text-white">About</a></li>
+            <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+            <li><a href="admin-login.html" class="hover:text-white">Admin</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Customer Care</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Shipping & Returns</a></li>
+            <li><a href="#" class="hover:text-white">FAQ</a></li>
+            <li><a href="#" class="hover:text-white">Support</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+          <form class="flex gap-2">
+            <input type="email" placeholder="Email" class="flex-1 px-3 py-2 rounded" />
+            <button class="btn-gold px-4 py-2 rounded-lg font-semibold">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-gray-700 pt-6 text-sm flex justify-between">
+        <span>© <span id="year"></span> La Familia. All rights reserved.</span>
+        <a href="cart.html" class="hover:text-white">View Cart</a>
+      </div>
+    </div>
+  </footer>
+
+  <aside id="cartSidebar" class="cart-sidebar fixed top-0 right-0 w-80 h-full bg-white shadow-2xl z-50 flex flex-col">
+    <div class="p-4 border-b flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900">Shopping Cart</h3>
+      <button id="closeCart" class="p-2" aria-label="Close Cart">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-4 space-y-4 overflow-y-auto flex-1" id="cartItems"></div>
+    <div class="p-4 border-t safe-bottom">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-lg font-semibold">Total:</span>
+        <span class="cart-total text-xl font-bold text-gold">$0</span>
+      </div>
+      <a href="cart.html" class="btn-primary w-full py-3 rounded-lg text-white font-semibold text-center block">Go to Cart</a>
+    </div>
+  </aside>
+
+  <script src="main.js"></script>
+</body>
+</html>

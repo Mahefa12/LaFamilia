@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - La Familia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --gold: #D4AF37; --soft-gold: #F4E4BC; --charcoal: #2C2C2C; }
+    body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .btn-primary { background-color: #000000; color: #fff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex-shrink-0">
+          <a href="index.html" class="flex items-center space-x-2">
+            <img src="Images/Logo.jpg" alt="La Familia" class="h-8 w-auto" />
+            <span class="font-playfair text-2xl font-black text-black">La Familia</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-24 pb-16">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow-sm">
+      <h1 class="font-playfair text-3xl font-bold mb-4">Admin Login</h1>
+      <div class="bg-yellow-50 border border-yellow-200 rounded p-3 text-sm mb-4">
+        <div class="font-semibold mb-1">Demo Credentials</div>
+        <div>Username: <span class="font-mono">admin</span></div>
+        <div>Password: <span class="font-mono">admin123</span></div>
+      </div>
+      <form id="adminLoginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1">Username</label>
+          <input id="adminUser" type="text" class="w-full border rounded-lg px-4 py-3" required />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Password</label>
+          <input id="adminPass" type="password" class="w-full border rounded-lg px-4 py-3" required />
+        </div>
+        <button type="submit" class="btn-primary w-full px-6 py-3 rounded-lg font-semibold">Login</button>
+      </form>
+      <p id="adminLoginError" class="mt-3 text-red-600 hidden">Invalid credentials</p>
+    </div>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

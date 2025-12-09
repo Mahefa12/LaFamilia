@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart - La Familia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --gold: #D4AF37; --soft-gold: #F4E4BC; --charcoal: #2C2C2C; }
+    body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .btn-gold { background: linear-gradient(135deg, #D4AF37, #F4E4BC); color: #000; }
+    .btn-primary { background: linear-gradient(135deg, #000000, #2C2C2C); color: #fff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex-shrink-0">
+          <a href="index.html" class="flex items-center space-x-2">
+            <img src="Images/Logo.jpg" alt="La Familia" class="h-8 w-auto" />
+            <span class="font-playfair text-2xl font-black text-black">La Familia</span>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="nav-link text-gray-700 hover:text-black font-medium">Home</a>
+          <a href="shop.html" class="nav-link text-gray-700 hover:text-black font-medium">Shop</a>
+          <a href="about.html" class="nav-link text-gray-700 hover:text-black font-medium">About</a>
+          <a href="contact.html" class="nav-link text-gray-700 hover:text-black font-medium">Contact</a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="shop.html" class="btn-primary px-4 py-2 rounded-lg text-white font-semibold">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="font-playfair text-4xl md:text-5xl font-bold text-black mb-6">Your Cart</h1>
+      <div id="cartPageItems" class="space-y-4"></div>
+      <div class="mt-6 flex items-center justify-between">
+        <span class="text-lg font-semibold">Total:</span>
+        <span id="cartPageTotal" class="text-xl font-bold" data-total>$0</span>
+      </div>
+      <div class="mt-6 flex gap-3">
+        <a href="shop.html" class="btn-primary px-6 py-3 rounded-lg text-white font-semibold">Continue Shopping</a>
+        <button class="btn-gold px-6 py-3 rounded-lg font-semibold">Checkout</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-black text-gray-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <a href="index.html" class="flex items-center space-x-2 mb-4">
+            <img src="Images/Logo.jpg" alt="La Familia" class="h-8 w-auto" />
+            <span class="font-playfair text-2xl font-black text-white">La Familia</span>
+          </a>
+          <p class="text-sm">Luxury streetwear for the bold and ambitious.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="shop.html" class="hover:text-white">Shop</a></li>
+            <li><a href="about.html" class="hover:text-white">About</a></li>
+            <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Customer Care</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Shipping & Returns</a></li>
+            <li><a href="#" class="hover:text-white">FAQ</a></li>
+            <li><a href="#" class="hover:text-white">Support</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+          <form class="flex gap-2">
+            <input type="email" placeholder="Email" class="flex-1 px-3 py-2 rounded" />
+            <button class="btn-gold px-4 py-2 rounded-lg font-semibold">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-gray-700 pt-6 text-sm flex justify-between">
+        <span>© <span id="year"></span> La Familia. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
