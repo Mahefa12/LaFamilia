@@ -30,7 +30,7 @@ function renderCartSidebar() {
     const row = document.createElement('div');
     row.className = 'flex items-center gap-3';
     row.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded"/>
+      <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded" loading="lazy" decoding="async" sizes="64px"/>
       <div class="flex-1">
         <div class="font-semibold">${item.name}</div>
         <div class="text-sm text-gray-600">${formatCurrency(item.price)} × ${item.qty}</div>
@@ -81,13 +81,27 @@ function closeCart() {
 function initNav() {
   const mobileBtn = document.getElementById('mobileMenuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-  const cartBtn = document.getElementById('cartBtn');
   const closeBtn = document.getElementById('closeCart');
+  const siteNav = document.getElementById('siteNav');
   if (mobileBtn && mobileMenu) {
     mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
   }
-  if (cartBtn) cartBtn.addEventListener('click', openCart);
+  document.querySelectorAll('#cartBtn, #cartBtnMobile').forEach(btn => {
+    btn.addEventListener('click', openCart);
+  });
   if (closeBtn) closeBtn.addEventListener('click', closeCart);
+  if (siteNav) {
+    const applyScrollState = () => {
+      const scrolled = window.scrollY > 4;
+      siteNav.classList.toggle('backdrop-blur-md', scrolled);
+      siteNav.classList.toggle('bg-ivory/70', scrolled);
+      siteNav.classList.toggle('bg-ivory/95', !scrolled);
+      siteNav.classList.toggle('border-b', scrolled);
+      siteNav.classList.toggle('border-gold/10', scrolled);
+    };
+    applyScrollState();
+    window.addEventListener('scroll', applyScrollState, { passive: true });
+  }
 }
 
 function initButtons() {
@@ -111,21 +125,22 @@ function renderShopGrid() {
   grid.innerHTML = '';
   products.forEach(p => {
     const card = document.createElement('div');
-    card.className = 'product-card bg-gray-50 rounded-xl overflow-hidden shadow-sm';
+    card.className = 'product-card reveal bg-white rounded-xl overflow-hidden';
     card.innerHTML = `
-      <img src="${p.image}" alt="${p.name}" class="w-full h-64 object-cover" />
-      <div class="p-4">
-        <h3 class="text-lg font-semibold">${p.name}</h3>
-        <p class="text-sm text-gray-600 line-clamp-2">${p.desc || ''}</p>
-        <div class="flex items-center justify-between mt-4">
-          <span class="text-black font-semibold">${formatCurrency(p.price)}</span>
-          <button class="btn-gold px-4 py-2 rounded-lg font-semibold add-to-cart" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">Add to Cart</button>
+      <div class="product-media relative h-[420px] md:h-[520px]">
+        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+        <div class="absolute bottom-0 left-0 right-0 p-4 text-white bg-gradient-to-t from-richblack/60 via-richblack/30 to-transparent flex items-center justify-between">
+          <span class="text-sm">${formatCurrency(p.price)}</span>
+          <a href="product.html?id=${p.id}" class="group inline-flex items-center gap-1 font-semibold">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></a>
         </div>
+      </div>
+      <div class="p-5">
+        <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">${p.name}</h3>
       </div>
     `;
     grid.appendChild(card);
   });
-  initButtons();
+  initScrollReveal();
 }
 
 function initSplide() {
@@ -142,24 +157,134 @@ function initYear() {
   if (y) y.textContent = new Date().getFullYear();
 }
 
-function initTyped() {
-  const el = document.getElementById('typed-text');
-  if (el && window.Typed) {
-    new Typed('#typed-text', {
-      strings: ['Luxury Streetwear', 'Bold Fashion', 'La Familia'],
-      typeSpeed: 70,
-      backSpeed: 40,
-      backDelay: 1500,
-      loop: true,
-      smartBackspace: true,
-      showCursor: true
+function initHeroLetters() {
+  const el = document.getElementById('hero-title');
+  if (el && window.Splitting) {
+    Splitting();
+  }
+}
+
+function initScrollReveal() {
+  const elements = Array.from(document.querySelectorAll('.reveal'));
+  if (!elements.length) return;
+  if (typeof IntersectionObserver === 'undefined') {
+    elements.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  elements.forEach(el => observer.observe(el));
+  // Ensure items already in viewport are visible immediately
+  elements.forEach(el => {
+    const r = el.getBoundingClientRect();
+    const inView = r.top < window.innerHeight && r.bottom > 0;
+    if (inView) el.classList.add('in-view');
+  });
+}
+
+function initParallax() {
+  const hero = document.querySelector('.hero-section');
+  const content = document.querySelector('.hero-content');
+  if (!hero || !content) return;
+  let ticking = false;
+  const onScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const y = window.scrollY || 0;
+        const offset = Math.min(40, y * 0.15);
+        content.style.transform = `translateY(${offset}px)`;
+        hero.style.backgroundPosition = `center calc(50% + ${Math.min(60, y * 0.1)}px)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
+function renderProductDetail() {
+  const container = document.getElementById('productDetail');
+  if (!container) return;
+  const id = getQueryParam('id');
+  const p = (id && loadProducts().find(x => x.id === id)) || null;
+  if (!p) {
+    container.innerHTML = '<div class="text-center py-20">Product not found.</div>';
+    return;
+  }
+  const images = Array.isArray(p.images) && p.images.length ? p.images : (p.image ? [p.image] : []);
+  const main = document.getElementById('productMainImage');
+  const thumbs = document.getElementById('productThumbs');
+  const titleEl = document.getElementById('productTitle');
+  const priceEl = document.getElementById('productPrice');
+  const storyEl = document.getElementById('productStory');
+  const materialEl = document.getElementById('productMaterial');
+  const fitEl = document.getElementById('productFit');
+  const addBtn = document.getElementById('productAddBtn');
+  if (titleEl) titleEl.textContent = p.name;
+  if (priceEl) priceEl.textContent = formatCurrency(p.price);
+  if (main) main.src = images[0] || '';
+  if (storyEl) storyEl.textContent = p.desc || 'An editorial overview of the piece.';
+  if (materialEl) materialEl.textContent = 'Premium cotton blend with gold accent hardware.';
+  if (fitEl) fitEl.textContent = 'Tailored fit with comfortable mobility.';
+  if (thumbs) {
+    thumbs.innerHTML = '';
+    images.forEach((src, idx) => {
+      const t = document.createElement('button');
+      t.className = 'thumb w-20 h-24 overflow-hidden rounded-lg border bg-white';
+      t.innerHTML = `<img src="${src}" alt="${p.name} ${idx+1}" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="80px"/>`;
+      t.addEventListener('click', () => switchMainImage(src));
+      thumbs.appendChild(t);
     });
   }
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      addToCart({ id: p.id, name: p.name, price: p.price, image: p.image || images[0] || '' });
+    });
+  }
+}
+
+function switchMainImage(src) {
+  const mainWrap = document.getElementById('productMainWrap');
+  const img = document.getElementById('productMainImage');
+  if (!img) return;
+  if (mainWrap) mainWrap.classList.add('fade');
+  setTimeout(() => {
+    img.src = src;
+    if (mainWrap) mainWrap.classList.remove('fade');
+  }, 180);
+}
+
+function initProductZoom() {
+  const img = document.getElementById('productMainImage');
+  const wrap = document.getElementById('productMainWrap');
+  if (!img || !wrap) return;
+  wrap.addEventListener('mousemove', (e) => {
+    const rect = wrap.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    img.style.transformOrigin = `${x}% ${y}%`;
+    img.style.transform = 'scale(1.15)';
+  });
+  wrap.addEventListener('mouseleave', () => {
+    img.style.transform = 'scale(1)';
+  });
 }
 
 // Admin
 const ADMIN_KEY = 'lafamilia_admin';
 const PRODUCTS_KEY = 'lafamilia_products';
+const PRODUCTS_UPDATED_KEY = 'lafamilia_products_updated_at';
 
 function isAdmin() {
   return localStorage.getItem(ADMIN_KEY) === 'true';
@@ -218,12 +343,14 @@ function loadProducts() {
 
 function saveProducts(products) {
   localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  localStorage.setItem(PRODUCTS_UPDATED_KEY, String(Date.now()));
 }
 
 function renderAdminProducts() {
   const container = document.getElementById('adminProducts');
   if (!container) return;
   const products = loadProducts();
+  renderAdminStats(products);
   container.innerHTML = '';
   products.forEach(p => {
     const row = document.createElement('div');
@@ -261,6 +388,28 @@ function renderAdminProducts() {
   });
 }
 
+function getProductsUpdatedAt() {
+  const ts = Number(localStorage.getItem(PRODUCTS_UPDATED_KEY) || '0');
+  return ts > 0 ? new Date(ts) : null;
+}
+
+function renderAdminStats(products) {
+  const countEl = document.getElementById('statProductCount');
+  const updatedEl = document.getElementById('statLastUpdated');
+  const imagesEl = document.getElementById('statTotalImages');
+  const count = Array.isArray(products) ? products.length : 0;
+  const totalImages = Array.isArray(products) ? products.reduce((sum, p) => {
+    const imgs = (p.images && p.images.length) ? p.images.length : (p.image ? 1 : 0);
+    return sum + imgs;
+  }, 0) : 0;
+  const updatedAt = getProductsUpdatedAt();
+  if (countEl) countEl.textContent = String(count);
+  if (imagesEl) imagesEl.textContent = String(totalImages);
+  if (updatedEl) {
+    updatedEl.textContent = updatedAt ? updatedAt.toLocaleString() : '—';
+  }
+}
+
 function fillProductForm(id) {
   const products = loadProducts();
   const p = products.find(pr => pr.id === id);
@@ -283,6 +432,8 @@ function fillProductForm(id) {
       const img = document.createElement('img');
       img.src = u;
       img.className = 'w-16 h-16 object-cover rounded border';
+      img.loading = 'lazy';
+      img.decoding = 'async';
       preview.appendChild(img);
     });
   }
@@ -367,6 +518,8 @@ function initProductForm() {
           const img = document.createElement('img');
           img.src = u;
           img.className = 'w-16 h-16 object-cover rounded border';
+          img.loading = 'lazy';
+          img.decoding = 'async';
           preview.appendChild(img);
         });
       }
@@ -397,7 +550,7 @@ function renderCartPage() {
     const row = document.createElement('div');
     row.className = 'bg-white p-4 rounded-xl shadow-sm flex items-center gap-4';
     row.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded" />
+      <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded" loading="lazy" decoding="async" sizes="80px" />
       <div class="flex-1">
         <div class="font-semibold">${item.name}</div>
         <div class="text-sm text-gray-600">${formatCurrency(item.price)}</div>
@@ -455,7 +608,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initButtons();
   initSplide();
-  initTyped();
+  initHeroLetters();
+  initScrollReveal();
+  initParallax();
   updateCartCount();
   renderCartSidebar();
   initYear();
@@ -465,4 +620,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminLogout();
   initAdminDashboard();
   renderShopGrid();
+  renderProductDetail();
+  initProductZoom();
 });

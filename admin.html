@@ -5,25 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin - La Familia</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { gold: '#d4af37', richblack: '#0a0a0a', charcoal: '#1a1a1a', ivory: '#f8f5ef' },
+          letterSpacing: { luxury: '0.03em' },
+          lineHeight: { luxury: '1.7' },
+          fontFamily: { heading: ['Cormorant Garamond','serif'], body: ['Lato','Inter','sans-serif'] }
+        }
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
-    :root { --gold: #D4AF37; --soft-gold: #F4E4BC; --charcoal: #2C2C2C; }
-    body { font-family: 'Inter', sans-serif; background-color: #FAFAFA; }
-    .font-playfair { font-family: 'Playfair Display', serif; }
-    .btn-primary { background-color: #000000; color: #fff; }
-    .btn-gold { background-color: #D4AF37; color: #000; }
+    :root { --gold: #d4af37; --richblack: #0a0a0a; --charcoal: #1a1a1a; --ivory: #f8f5ef; }
+    body { font-family: 'Lato','Inter', sans-serif; background-color: var(--ivory); letter-spacing: 0.02em; line-height: 1.7; font-weight: 300; }
+    .font-playfair { font-family: 'Cormorant Garamond', serif; }
+    .btn-primary { background-color: var(--richblack); color: #fff; }
+    .btn-gold { background-color: var(--gold); color: #000; }
   </style>
 </head>
-<body class="bg-gray-50">
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+<body class="bg-ivory">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-ivory/95 backdrop-blur-md shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex-shrink-0">
           <a href="index.html" class="flex items-center space-x-2">
             <img src="Images/Logo.jpg" alt="La Familia" class="h-8 w-auto" />
-            <span class="font-playfair text-2xl font-black text-black">La Familia</span>
+            <span class="font-playfair text-2xl font-black text-richblack tracking-luxury">La Familia</span>
           </a>
         </div>
         <div class="flex items-center gap-2">
@@ -34,9 +46,25 @@
     </div>
   </nav>
 
-  <main class="pt-24 pb-16">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="font-playfair text-3xl font-bold mb-6">Manage Products</h1>
+  <main class="pt-28 pb-24">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-[85%]">
+      <h1 class="font-playfair text-3xl font-semibold mb-8 tracking-luxury text-richblack">Manage Products</h1>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+          <div class="text-sm text-gray-500">Products</div>
+          <div id="statProductCount" class="text-2xl font-semibold mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+          <div class="text-sm text-gray-500">Total Images</div>
+          <div id="statTotalImages" class="text-2xl font-semibold mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+          <div class="text-sm text-gray-500">Last Updated</div>
+          <div id="statLastUpdated" class="text-sm mt-1">—</div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <form id="productForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
           <h2 class="text-lg font-semibold">Add / Edit Product</h2>
@@ -68,7 +96,7 @@
           </div>
         </form>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/10">
           <h2 class="text-lg font-semibold mb-4">Products</h2>
           <div id="adminProducts" class="space-y-3"></div>
         </div>
