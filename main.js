@@ -47,7 +47,7 @@ function saveCart(cart) {
 }
 
 function formatCurrency(n) {
-  return `$${Number(n).toFixed(0)}`;
+  return `R${Number(n).toFixed(0)}`;
 }
 
 function updateCartCount() {
