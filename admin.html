@@ -64,30 +64,59 @@
           <div id="statLastUpdated" class="text-sm mt-1">—</div>
         </div>
       </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+          <div class="text-sm text-gray-500">Total Stock</div>
+          <div id="statTotalStock" class="text-2xl font-semibold mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+          <div class="text-sm text-gray-500">Sold Units (local)</div>
+          <div id="statSoldUnits" class="text-2xl font-semibold mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+          <div class="text-sm text-gray-500">Low Stock Warnings</div>
+          <div id="statLowStock" class="text-2xl font-semibold mt-1">0</div>
+        </div>
+      </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <form id="productForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
           <h2 class="text-lg font-semibold">Add / Edit Product</h2>
           <input type="hidden" id="productIdHidden" />
           <div>
-            <label class="block text-sm font-semibold mb-1">ID</label>
+            <label for="productId" class="block text-sm font-semibold mb-1">ID</label>
             <input id="productId" type="text" class="w-full border rounded-lg px-4 py-3" required />
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-1">Name</label>
+            <label for="productName" class="block text-sm font-semibold mb-1">Name</label>
             <input id="productName" type="text" class="w-full border rounded-lg px-4 py-3" required />
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-1">Price</label>
+            <label for="productPrice" class="block text-sm font-semibold mb-1">Price</label>
             <input id="productPrice" type="number" min="0" step="1" class="w-full border rounded-lg px-4 py-3" required />
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-1">Images</label>
-            <input id="productImages" type="file" accept="image/*" multiple class="w-full border rounded-lg px-4 py-3" />
+            <label class="block text-sm font-semibold mb-1">Collections</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label for="colBags" class="flex items-center gap-2"><input type="checkbox" id="colBags"/> <span>Bags</span></label>
+              <label for="colAccessories" class="flex items-center gap-2"><input type="checkbox" id="colAccessories"/> <span>Accessories</span></label>
+              <label for="colLimited" class="flex items-center gap-2"><input type="checkbox" id="colLimited"/> <span>Limited Editions</span></label>
+              <label for="colLookbook" class="flex items-center gap-2"><input type="checkbox" id="colLookbook"/> <span>Lookbook</span></label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1">Variants</label>
+            <div id="variantList" class="space-y-2"></div>
+            <button type="button" id="addVariantBtn" class="px-3 py-2 rounded border mt-2">Add Variant</button>
+          </div>
+          <div>
+            <label for="productImages" class="block text-sm font-semibold mb-1">Images</label>
+            <input id="productImages" type="file" accept="image/*" multiple class="w-full border rounded-lg px-4 py-3" aria-describedby="imagesHelp" />
+            <div class="text-xs text-gray-500 mt-1">Drag thumbnails to reorder</div>
             <div id="imagePreview" class="mt-2 flex gap-2 flex-wrap"></div>
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-1">Description</label>
+            <label for="productDesc" class="block text-sm font-semibold mb-1">Description</label>
             <textarea id="productDesc" class="w-full border rounded-lg px-4 py-3" rows="3" placeholder="Short description"></textarea>
           </div>
           <div class="flex gap-3">
@@ -104,6 +133,7 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

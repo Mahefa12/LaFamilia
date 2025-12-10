@@ -41,7 +41,7 @@
     :root { --gold: #d4af37; --richblack: #0a0a0a; --charcoal: #1a1a1a; --ivory: #f8f5ef; }
     body { font-family: 'Lato', 'Inter', sans-serif; background-color: var(--ivory); letter-spacing: 0.02em; line-height: 1.7; font-weight: 300; overflow-x: hidden; }
     .font-playfair { font-family: 'Cormorant Garamond', serif; }
-    .hero-section { position: relative; background: url('Images/sweater.jpg'); background-size: cover; background-position: center; min-height: 100vh; }
+    .hero-section { position: relative; min-height: 100vh; }
     .hero-section::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,10,0.6), rgba(10,10,10,0.35)); }
     .gold-accent { color: var(--gold); }
     .bg-gold { background-color: var(--gold); }
@@ -131,6 +131,7 @@
   </nav>
 
   <header class="hero-section text-white pt-28 pb-28">
+    <img aria-hidden="true" class="absolute inset-0 w-full h-full object-cover" src="Images/sweater.jpg" loading="lazy" decoding="async" srcset="Images/sweater.jpg 800w, Images/sweater.jpg 1400w, Images/sweater.jpg 2000w" sizes="100vw" />
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col items-center justify-center text-center min-h-[100vh]">
         <div class="hero-content max-w-3xl relative z-10">
@@ -160,9 +161,9 @@
       <div class="splide" id="lookbookSlider">
         <div class="splide__track">
           <ul class="splide__list">
-            <li class="splide__slide"><img src="Images/sweater.jpg" alt="Sweater" class="rounded-xl shadow-lg w-full h-80 object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" /></li>
-            <li class="splide__slide"><img src="Images/Jeans.jpg" alt="Jeans" class="rounded-xl shadow-lg w-full h-80 object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" /></li>
-            <li class="splide__slide"><img src="Images/sneaker.jpg" alt="Sneaker" class="rounded-xl shadow-lg w-full h-80 object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" /></li>
+            <li class="splide__slide"><img src="Images/sweater.jpg" alt="Sweater" class="rounded-xl shadow-lg w-full h-80 object-cover" loading="lazy" decoding="async" srcset="Images/sweater.jpg 800w, Images/sweater.jpg 1400w, Images/sweater.jpg 2000w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" /></li>
+            <li class="splide__slide"><img src="Images/Jeans.jpg" alt="Jeans" class="rounded-xl shadow-lg w-full h-80 object-cover" loading="lazy" decoding="async" srcset="Images/Jeans.jpg 800w, Images/Jeans.jpg 1400w, Images/Jeans.jpg 2000w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" /></li>
+            <li class="splide__slide"><img src="Images/sneaker.jpg" alt="Sneaker" class="rounded-xl shadow-lg w-full h-80 object-cover" loading="lazy" decoding="async" srcset="Images/sneaker.jpg 800w, Images/sneaker.jpg 1400w, Images/sneaker.jpg 2000w" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" /></li>
           </ul>
         </div>
       </div>
@@ -179,54 +180,10 @@
         </a>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media h-[420px] md:h-[520px]">
-            <img src="Images/Bag.jpg" alt="Leather Bag" class="absolute inset-0 w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Leather Bag</h3>
-            <div class="mt-3 flex items-center justify-between">
-              <span class="text-sm text-charcoal/80">$249</span>
-              <button class="group inline-flex items-center gap-1 font-semibold text-richblack add-to-cart" data-id="bag" data-name="Leather Bag" data-price="249" data-image="Images/Bag.jpg">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media h-[420px] md:h-[520px]">
-            <img src="Images/sneaker.jpg" alt="Sneaker" class="absolute inset-0 w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Urban Sneaker</h3>
-            <div class="mt-3 flex items-center justify-between">
-              <span class="text-sm text-charcoal/80">$179</span>
-              <button class="group inline-flex items-center gap-1 font-semibold text-richblack add-to-cart" data-id="sneaker" data-name="Urban Sneaker" data-price="179" data-image="Images/sneaker.jpg">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media h-[420px] md:h-[520px]">
-            <img src="Images/Jeans.jpg" alt="Jeans" class="absolute inset-0 w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Tailored Jeans</h3>
-            <div class="mt-3 flex items-center justify-between">
-              <span class="text-sm text-charcoal/80">$139</span>
-              <button class="group inline-flex items-center gap-1 font-semibold text-richblack add-to-cart" data-id="jeans" data-name="Tailored Jeans" data-price="139" data-image="Images/Jeans.jpg">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media h-[420px] md:h-[520px]">
-            <img src="Images/sweater.jpg" alt="Sweater" class="absolute inset-0 w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Luxury Sweater</h3>
-            <div class="mt-3 flex items-center justify-between">
-              <span class="text-sm text-charcoal/80">$159</span>
-              <button class="group inline-flex items-center gap-1 font-semibold text-richblack add-to-cart" data-id="sweater" data-name="Luxury Sweater" data-price="159" data-image="Images/sweater.jpg">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></button>
-            </div>
-          </div>
-        </div>
+        <product-card id="bag" name="Leather Bag" price="249" image="Images/Bag.jpg"></product-card>
+        <product-card id="sneaker" name="Urban Sneaker" price="179" image="Images/sneaker.jpg"></product-card>
+        <product-card id="jeans" name="Tailored Jeans" price="139" image="Images/Jeans.jpg"></product-card>
+        <product-card id="sweater" name="Luxury Sweater" price="159" image="Images/sweater.jpg"></product-card>
       </div>
     </div>
   </section>
@@ -244,7 +201,7 @@
           </a>
         </div>
         <div class="rounded-xl overflow-hidden shadow-lg">
-          <img src="Images/Bag.jpg" alt="Craftsmanship" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, 50vw" />
+          <img src="Images/Bag.jpg" alt="Craftsmanship" class="w-full h-full object-cover" loading="lazy" decoding="async" srcset="Images/Bag.jpg 800w, Images/Bag.jpg 1400w, Images/Bag.jpg 2000w" sizes="(max-width: 640px) 100vw, 50vw" />
         </div>
       </div>
     </div>

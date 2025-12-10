@@ -99,54 +99,10 @@
  
       </div>
       <div id="shopGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media relative h-[420px] md:h-[520px]">
-            <img src="Images/Bag.jpg" alt="Leather Bag" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
-            <div class="absolute bottom-0 left-0 right-0 p-4 text-white bg-gradient-to-t from-richblack/60 via-richblack/30 to-transparent flex items-center justify-between">
-              <span class="text-sm">$249</span>
-              <a href="product.html?id=bag" class="group inline-flex items-center gap-1 font-semibold">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></a>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Leather Bag</h3>
-          </div>
-        </div>
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media relative h-[420px] md:h-[520px]">
-            <img src="Images/sneaker.jpg" alt="Urban Sneaker" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
-            <div class="absolute bottom-0 left-0 right-0 p-4 text-white bg-gradient-to-t from-richblack/60 via-richblack/30 to-transparent flex items-center justify-between">
-              <span class="text-sm">$179</span>
-              <a href="product.html?id=sneaker" class="group inline-flex items-center gap-1 font-semibold">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></a>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Urban Sneaker</h3>
-          </div>
-        </div>
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media relative h-[420px] md:h-[520px]">
-            <img src="Images/Jeans.jpg" alt="Tailored Jeans" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
-            <div class="absolute bottom-0 left-0 right-0 p-4 text-white bg-gradient-to-t from-richblack/60 via-richblack/30 to-transparent flex items-center justify-between">
-              <span class="text-sm">$139</span>
-              <a href="product.html?id=jeans" class="group inline-flex items-center gap-1 font-semibold">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></a>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Tailored Jeans</h3>
-          </div>
-        </div>
-        <div class="product-card reveal bg-white rounded-xl overflow-hidden">
-          <div class="product-media relative h-[420px] md:h-[520px]">
-            <img src="Images/sweater.jpg" alt="Luxury Sweater" class="w-full h-full object-cover" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
-            <div class="absolute bottom-0 left-0 right-0 p-4 text-white bg-gradient-to-t from-richblack/60 via-richblack/30 to-transparent flex items-center justify-between">
-              <span class="text-sm">$159</span>
-              <a href="product.html?id=sweater" class="group inline-flex items-center gap-1 font-semibold">Shop <span class="transition-transform group-hover:translate-x-0.5">→</span></a>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="font-playfair uppercase tracking-[0.08em] text-lg">Luxury Sweater</h3>
-          </div>
-        </div>
+        <product-card id="bag" name="Leather Bag" price="249" image="Images/Bag.jpg"></product-card>
+        <product-card id="sneaker" name="Urban Sneaker" price="179" image="Images/sneaker.jpg"></product-card>
+        <product-card id="jeans" name="Tailored Jeans" price="139" image="Images/Jeans.jpg"></product-card>
+        <product-card id="sweater" name="Luxury Sweater" price="159" image="Images/sweater.jpg"></product-card>
       </div>
     </div>
   </main>
