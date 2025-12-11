@@ -1301,19 +1301,19 @@ function addVariantRow(v) {
   const list = document.getElementById('variantList');
   if (!list) return;
   const row = document.createElement('div');
-  row.className = 'flex items-center gap-2';
+  row.className = 'flex flex-wrap items-center gap-2 w-full';
   const sizeVal = v && v.size ? v.size : 'S';
   const colorVal = v && v.color ? v.color : '';
   const stockVal = v && v.stock != null ? v.stock : 0;
   row.innerHTML = `
-    <select class="border rounded px-2 py-2 variant-size">
+    <select class="border rounded px-2 py-2 variant-size shrink-0">
       <option ${sizeVal==='S'?'selected':''}>S</option>
       <option ${sizeVal==='M'?'selected':''}>M</option>
       <option ${sizeVal==='L'?'selected':''}>L</option>
     </select>
-    <input type="text" class="border rounded px-2 py-2 flex-1 variant-color" placeholder="Color" value="${colorVal}"/>
-    <input type="number" min="0" class="border rounded px-2 py-2 w-24 variant-stock" placeholder="Stock" value="${stockVal}"/>
-    <button type="button" class="px-3 py-2 rounded border text-red-600 variant-remove">Remove</button>
+    <input type="text" class="border rounded px-2 py-2 flex-1 min-w-[160px] variant-color" placeholder="Color" value="${colorVal}"/>
+    <input type="number" min="0" class="border rounded px-2 py-2 w-24 variant-stock shrink-0" placeholder="Stock" value="${stockVal}"/>
+    <button type="button" class="px-3 py-2 rounded border text-red-600 variant-remove shrink-0">Remove</button>
   `;
   list.appendChild(row);
   row.querySelector('.variant-remove').addEventListener('click', () => {
