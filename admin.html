@@ -47,93 +47,315 @@
   </nav>
 
   <main class="pt-28 pb-24">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-[85%]">
-      <h1 class="font-playfair text-3xl font-semibold mb-8 tracking-luxury text-richblack">Manage Products</h1>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
-          <div class="text-sm text-gray-500">Products</div>
-          <div id="statProductCount" class="text-2xl font-semibold mt-1">0</div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
-          <div class="text-sm text-gray-500">Total Images</div>
-          <div id="statTotalImages" class="text-2xl font-semibold mt-1">0</div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
-          <div class="text-sm text-gray-500">Last Updated</div>
-          <div id="statLastUpdated" class="text-sm mt-1">—</div>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
-          <div class="text-sm text-gray-500">Total Stock</div>
-          <div id="statTotalStock" class="text-2xl font-semibold mt-1">0</div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
-          <div class="text-sm text-gray-500">Sold Units (local)</div>
-          <div id="statSoldUnits" class="text-2xl font-semibold mt-1">0</div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
-          <div class="text-sm text-gray-500">Low Stock Warnings</div>
-          <div id="statLowStock" class="text-2xl font-semibold mt-1">0</div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <form id="productForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-          <h2 class="text-lg font-semibold">Add / Edit Product</h2>
-          <input type="hidden" id="productIdHidden" />
-          <div>
-            <label for="productId" class="block text-sm font-semibold mb-1">ID</label>
-            <input id="productId" type="text" class="w-full border rounded-lg px-4 py-3" required />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-12 gap-8">
+        <aside class="col-span-12 md:col-span-3">
+          <div id="adminSidebar" class="bg-white rounded-xl shadow-sm border border-gold/20 p-4 sticky top-24">
+            <h2 class="font-playfair text-xl font-semibold mb-4 text-richblack">Admin</h2>
+            <nav class="space-y-1">
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-dashboard">Dashboard</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-products">Products</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-orders">Orders</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-inventory">Inventory</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-collections">Collections</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-customers">Customers</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-promotions">Promotions</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-marketing">Marketing</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-analytics">Analytics</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-ivory" data-target="section-settings">Settings</button>
+            </nav>
           </div>
-          <div>
-            <label for="productName" class="block text-sm font-semibold mb-1">Name</label>
-            <input id="productName" type="text" class="w-full border rounded-lg px-4 py-3" required />
-          </div>
-          <div>
-            <label for="productPrice" class="block text-sm font-semibold mb-1">Price</label>
-            <input id="productPrice" type="number" min="0" step="1" class="w-full border rounded-lg px-4 py-3" required />
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Collections</label>
-            <div class="grid grid-cols-2 gap-2">
-              <label for="colBags" class="flex items-center gap-2"><input type="checkbox" id="colBags"/> <span>Bags</span></label>
-              <label for="colAccessories" class="flex items-center gap-2"><input type="checkbox" id="colAccessories"/> <span>Accessories</span></label>
-              <label for="colLimited" class="flex items-center gap-2"><input type="checkbox" id="colLimited"/> <span>Limited Editions</span></label>
-              <label for="colLookbook" class="flex items-center gap-2"><input type="checkbox" id="colLookbook"/> <span>Lookbook</span></label>
+        </aside>
+        <section class="col-span-12 md:col-span-9 space-y-10">
+          <div id="section-dashboard" class="space-y-6">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Dashboard</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+                <div class="text-sm text-gray-500">Products</div>
+                <div id="statProductCount" class="text-2xl font-semibold mt-1">0</div>
+              </div>
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+                <div class="text-sm text-gray-500">Total Images</div>
+                <div id="statTotalImages" class="text-2xl font-semibold mt-1">0</div>
+              </div>
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+                <div class="text-sm text-gray-500">Last Updated</div>
+                <div id="statLastUpdated" class="text-sm mt-1">—</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+                <div class="text-sm text-gray-500">Total Stock</div>
+                <div id="statTotalStock" class="text-2xl font-semibold mt-1">0</div>
+              </div>
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+                <div class="text-sm text-gray-500">Sold Units (local)</div>
+                <div id="statSoldUnits" class="text-2xl font-semibold mt-1">0</div>
+              </div>
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-5">
+                <div class="text-sm text-gray-500">Low Stock Warnings</div>
+                <div id="statLowStock" class="text-2xl font-semibold mt-1">0</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-6">
+                <h3 class="text-lg font-semibold mb-4">Daily Views</h3>
+                <canvas id="chartDailyViews" height="160"></canvas>
+              </div>
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-6">
+                <h3 class="text-lg font-semibold mb-4">Product Performance</h3>
+                <canvas id="chartProductPerf" height="160"></canvas>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-6">
+              <h3 class="text-lg font-semibold mb-4">Activity</h3>
+              <ul id="adminActivity" class="space-y-2"></ul>
             </div>
           </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Variants</label>
-            <div id="variantList" class="space-y-2"></div>
-            <button type="button" id="addVariantBtn" class="px-3 py-2 rounded border mt-2">Add Variant</button>
-          </div>
-          <div>
-            <label for="productImages" class="block text-sm font-semibold mb-1">Images</label>
-            <input id="productImages" type="file" accept="image/*" multiple class="w-full border rounded-lg px-4 py-3" aria-describedby="imagesHelp" />
-            <div class="text-xs text-gray-500 mt-1">Drag thumbnails to reorder</div>
-            <div id="imagePreview" class="mt-2 flex gap-2 flex-wrap"></div>
-          </div>
-          <div>
-            <label for="productDesc" class="block text-sm font-semibold mb-1">Description</label>
-            <textarea id="productDesc" class="w-full border rounded-lg px-4 py-3" rows="3" placeholder="Short description"></textarea>
-          </div>
-          <div class="flex gap-3">
-            <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold">Save</button>
-            <button type="button" id="productReset" class="px-6 py-3 rounded-lg border">Reset</button>
-          </div>
-        </form>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/10">
-          <h2 class="text-lg font-semibold mb-4">Products</h2>
-          <div id="adminProducts" class="space-y-3"></div>
-        </div>
+          <div id="section-products" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Products</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <form id="productForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+                <h2 class="text-lg font-semibold">Add / Edit Product</h2>
+                <input type="hidden" id="productIdHidden" />
+                <div>
+                  <label for="productId" class="block text-sm font-semibold mb-1">ID</label>
+                  <input id="productId" type="text" class="w-full border rounded-lg px-4 py-3" required />
+                </div>
+                <div>
+                  <label for="productName" class="block text-sm font-semibold mb-1">Name</label>
+                  <input id="productName" type="text" class="w-full border rounded-lg px-4 py-3" required />
+                </div>
+                <div>
+                  <label for="productPrice" class="block text-sm font-semibold mb-1">Price</label>
+                  <input id="productPrice" type="number" min="0" step="1" class="w-full border rounded-lg px-4 py-3" required />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-1">Collections</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <label for="colBags" class="flex items-center gap-2"><input type="checkbox" id="colBags"/> <span>Bags</span></label>
+                    <label for="colAccessories" class="flex items-center gap-2"><input type="checkbox" id="colAccessories"/> <span>Accessories</span></label>
+                    <label for="colLimited" class="flex items-center gap-2"><input type="checkbox" id="colLimited"/> <span>Limited Editions</span></label>
+                    <label for="colLookbook" class="flex items-center gap-2"><input type="checkbox" id="colLookbook"/> <span>Lookbook</span></label>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-1">Variants</label>
+                  <div id="variantList" class="space-y-2"></div>
+                  <button type="button" id="addVariantBtn" class="px-3 py-2 rounded border mt-2">Add Variant</button>
+                </div>
+                <div>
+                  <label for="productImages" class="block text-sm font-semibold mb-1">Images</label>
+                  <input id="productImages" type="file" accept="image/*" multiple class="w-full border rounded-lg px-4 py-3" aria-describedby="imagesHelp" />
+                  <div class="text-xs text-gray-500 mt-1">Drag thumbnails to reorder</div>
+                  <div id="imagePreview" class="mt-2 flex gap-2 flex-wrap"></div>
+                </div>
+                <div>
+                  <label for="productDesc" class="block text-sm font-semibold mb-1">Description</label>
+                  <textarea id="productDesc" class="w-full border rounded-lg px-4 py-3" rows="3" placeholder="Short description"></textarea>
+                </div>
+                <div class="flex gap-3">
+                  <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold">Save</button>
+                  <button type="button" id="productReset" class="px-6 py-3 rounded-lg border">Reset</button>
+                </div>
+              </form>
+              <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/10">
+                <h2 class="text-lg font-semibold mb-4">Products</h2>
+                <div id="adminProducts" class="space-y-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="section-orders" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Orders</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/20">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-2">
+                  <input id="orderSearch" type="text" placeholder="Search orders" class="border rounded px-3 py-2" />
+                  <select id="orderFilter" class="border rounded px-3 py-2">
+                    <option value="">All</option>
+                    <option>Pending</option>
+                    <option>Packed</option>
+                    <option>Delivered</option>
+                  </select>
+                </div>
+                <div class="flex gap-2">
+                  <button id="ordersExportCsv" class="px-3 py-2 rounded border">Export CSV</button>
+                </div>
+              </div>
+              <div id="ordersTable" class="space-y-2"></div>
+            </div>
+          </div>
+
+          <div id="section-inventory" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Inventory</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/20">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-2">
+                  <button id="bulkUpdateStock" class="px-3 py-2 rounded border">Bulk update stock</button>
+                  <button id="exportInventory" class="px-3 py-2 rounded border">Export</button>
+                </div>
+                <div id="lowStockAlerts" class="text-sm text-red-600"></div>
+              </div>
+              <div id="inventoryTable" class="space-y-2"></div>
+            </div>
+          </div>
+
+          <div id="section-collections" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Collections</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <form id="collectionForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+                <div>
+                  <label for="collectionName" class="block text-sm font-semibold mb-1">Name</label>
+                  <input id="collectionName" type="text" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div>
+                  <label for="collectionDesc" class="block text-sm font-semibold mb-1">Description</label>
+                  <textarea id="collectionDesc" class="w-full border rounded-lg px-4 py-3" rows="3"></textarea>
+                </div>
+                <div>
+                  <label for="collectionCover" class="block text-sm font-semibold mb-1">Cover Image URL</label>
+                  <input id="collectionCover" type="text" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div class="flex gap-3">
+                  <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold">Create</button>
+                  <button type="button" id="collectionReset" class="px-6 py-3 rounded-lg border">Reset</button>
+                </div>
+              </form>
+              <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/10">
+                <h2 class="text-lg font-semibold mb-4">Collections</h2>
+                <div id="collectionsList" class="space-y-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="section-customers" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Customers</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/20">
+              <div class="flex items-center justify-between mb-4">
+                <input id="customerSearch" type="text" placeholder="Search customers" class="border rounded px-3 py-2" />
+                <div class="flex gap-2">
+                  <button id="customersExportCsv" class="px-3 py-2 rounded border">Export</button>
+                </div>
+              </div>
+              <div id="customersTable" class="space-y-2"></div>
+            </div>
+          </div>
+
+          <div id="section-promotions" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Promotions</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <form id="promoForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+                <div>
+                  <label for="promoCode" class="block text-sm font-semibold mb-1">Code</label>
+                  <input id="promoCode" type="text" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div>
+                  <label for="promoDiscount" class="block text-sm font-semibold mb-1">Discount %</label>
+                  <input id="promoDiscount" type="number" min="0" max="100" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div>
+                  <label for="promoExpiry" class="block text-sm font-semibold mb-1">Expiry</label>
+                  <input id="promoExpiry" type="date" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div class="flex gap-3">
+                  <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold">Create</button>
+                  <button type="button" id="promoReset" class="px-6 py-3 rounded-lg border">Reset</button>
+                </div>
+              </form>
+              <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/10">
+                <h2 class="text-lg font-semibold mb-4">Active Promotions</h2>
+                <div id="promotionsList" class="space-y-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="section-marketing" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Marketing</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gold/20">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex gap-2">
+                  <button id="subscribersExport" class="px-3 py-2 rounded border">Export Emails</button>
+                </div>
+              </div>
+              <div id="subscribersList" class="space-y-2"></div>
+            </div>
+          </div>
+
+          <div id="section-analytics" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Analytics</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-6">
+                <h3 class="text-lg font-semibold mb-4">Add to Cart Events</h3>
+                <canvas id="chartCartAdds" height="160"></canvas>
+              </div>
+              <div class="bg-white rounded-xl shadow-sm border border-gold/20 p-6">
+                <h3 class="text-lg font-semibold mb-4">Top Products</h3>
+                <canvas id="chartTopProducts" height="160"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div id="section-settings" class="space-y-6 hidden">
+            <h1 class="font-playfair text-3xl font-semibold tracking-luxury text-richblack">Settings</h1>
+            <form id="settingsForm" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+              <div>
+                <label for="storeName" class="block text-sm font-semibold mb-1">Store Name</label>
+                <input id="storeName" type="text" class="w-full border rounded-lg px-4 py-3" />
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label for="colorGold" class="block text-sm font-semibold mb-1">Gold</label>
+                  <input id="colorGold" type="color" class="w-full border rounded-lg h-10" />
+                </div>
+                <div>
+                  <label for="colorBlack" class="block text-sm font-semibold mb-1">Black</label>
+                  <input id="colorBlack" type="color" class="w-full border rounded-lg h-10" />
+                </div>
+                <div>
+                  <label for="colorIvory" class="block text-sm font-semibold mb-1">Ivory</label>
+                  <input id="colorIvory" type="color" class="w-full border rounded-lg h-10" />
+                </div>
+              </div>
+              <div>
+                <label for="contactEmail" class="block text-sm font-semibold mb-1">Contact Email</label>
+                <input id="contactEmail" type="email" class="w-full border rounded-lg px-4 py-3" />
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="instagramLink" class="block text-sm font-semibold mb-1">Instagram</label>
+                  <input id="instagramLink" type="url" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div>
+                  <label for="youtubeLink" class="block text-sm font-semibold mb-1">YouTube</label>
+                  <input id="youtubeLink" type="url" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="adminPassChange" class="block text-sm font-semibold mb-1">Admin Password</label>
+                  <input id="adminPassChange" type="password" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+                <div>
+                  <label for="sessionTimeout" class="block text-sm font-semibold mb-1">Session Timeout (minutes)</label>
+                  <input id="sessionTimeout" type="number" min="5" class="w-full border rounded-lg px-4 py-3" />
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold">Save</button>
+                <button type="button" id="settingsExport" class="px-6 py-3 rounded-lg border">Backup JSON</button>
+                <button type="button" id="settingsResetAll" class="px-6 py-3 rounded-lg border text-red-600">Reset All Data</button>
+              </div>
+            </form>
+          </div>
+        </section>
       </div>
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

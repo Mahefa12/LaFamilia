@@ -1,5 +1,12 @@
 const STORAGE_KEY = 'lafamilia_cart';
 const SALES_KEY = 'lafamilia_sold_units';
+const COLLECTIONS_KEY = 'lafamilia_collections';
+const ORDERS_KEY = 'lafamilia_orders';
+const CUSTOMERS_KEY = 'lafamilia_customers';
+const PROMOS_KEY = 'lafamilia_promotions';
+const SUBSCRIBERS_KEY = 'lafamilia_subscribers';
+const SETTINGS_KEY = 'lafamilia_settings';
+const ANALYTICS_KEY = 'lafamilia_analytics';
 
 function injectGlobalTypography() {
   const style = document.createElement('style');
@@ -106,6 +113,11 @@ function addToCart(item) {
   try {
     const sold = Number(localStorage.getItem(SALES_KEY) || '0');
     localStorage.setItem(SALES_KEY, String(sold + 1));
+  } catch {}
+  try {
+    const events = JSON.parse(localStorage.getItem(ANALYTICS_KEY) || '[]');
+    events.push({ type: 'add_to_cart', id: item.id, ts: Date.now() });
+    localStorage.setItem(ANALYTICS_KEY, JSON.stringify(events));
   } catch {}
   updateCartCount();
   renderCartSidebar();
@@ -553,6 +565,7 @@ function renderAdminProducts() {
       if (idx !== -1) {
         products.splice(idx, 1);
         saveProducts(products);
+        recordActivity(`Deleted product ${id}`);
         renderAdminProducts();
       }
     });
@@ -710,6 +723,7 @@ function initProductForm() {
       products.push(payload);
     }
     saveProducts(products);
+    recordActivity(editingId ? `Edited product ${editingId}` : `Created product ${payload.id}`);
     renderAdminProducts();
     resetProductForm();
   });
@@ -834,12 +848,413 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminGuard();
   initAdminLogout();
   initAdminDashboard();
+  initAdminApp();
   renderShopGrid();
   renderProductDetail();
   initProductAccordion();
   initProductZoom();
   initRipple();
 });
+
+function recordActivity(text) {
+  try {
+    const log = JSON.parse(localStorage.getItem('lafamilia_activity') || '[]');
+    log.unshift({ t: Date.now(), text });
+    localStorage.setItem('lafamilia_activity', JSON.stringify(log.slice(0, 100)));
+    const list = document.getElementById('adminActivity');
+    if (list) renderActivity();
+  } catch {}
+}
+
+function renderActivity() {
+  const list = document.getElementById('adminActivity');
+  if (!list) return;
+  const log = JSON.parse(localStorage.getItem('lafamilia_activity') || '[]');
+  list.innerHTML = '';
+  log.slice(0, 20).forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'text-sm text-gray-700';
+    li.textContent = item.text;
+    list.appendChild(li);
+  });
+}
+
+function initAdminApp() {
+  const sidebar = document.getElementById('adminSidebar');
+  if (!sidebar) return;
+  if (!isAdmin()) {
+    window.location.href = 'admin-login.html';
+    return;
+  }
+  const sections = Array.from(document.querySelectorAll('[id^="section-"]'));
+  const show = (id) => {
+    sections.forEach(s => s.classList.toggle('hidden', s.id !== id));
+  };
+  sidebar.querySelectorAll('[data-target]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      show(btn.getAttribute('data-target'));
+    });
+  });
+  show('section-dashboard');
+  renderAdminProducts();
+  initProductForm();
+  renderActivity();
+  renderInventory();
+  renderOrders();
+  renderCollections();
+  renderCustomers();
+  renderPromotions();
+  renderMarketing();
+  renderAnalytics();
+  renderSettings();
+}
+
+function loadCollections() {
+  try {
+    const c = JSON.parse(localStorage.getItem(COLLECTIONS_KEY));
+    if (Array.isArray(c)) return c;
+  } catch {}
+  const seed = ['Bags','Accessories','Limited Editions','Lookbook'].map(n => ({ name: n, desc: '', cover: '' }));
+  localStorage.setItem(COLLECTIONS_KEY, JSON.stringify(seed));
+  return seed;
+}
+
+function saveCollections(cols) {
+  localStorage.setItem(COLLECTIONS_KEY, JSON.stringify(cols));
+}
+
+function renderCollections() {
+  const list = document.getElementById('collectionsList');
+  const form = document.getElementById('collectionForm');
+  const name = document.getElementById('collectionName');
+  const desc = document.getElementById('collectionDesc');
+  const cover = document.getElementById('collectionCover');
+  if (list) {
+    const cols = loadCollections();
+    list.innerHTML = '';
+    cols.forEach((c, idx) => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-3 border rounded-lg p-3';
+      row.innerHTML = `
+        <div class="flex-1">
+          <div class="font-semibold">${c.name}</div>
+          <div class="text-sm text-gray-600">${c.desc}</div>
+        </div>
+        <button class="px-3 py-2 rounded border" data-hide="${idx}">Hide</button>
+        <button class="px-3 py-2 rounded border text-red-600" data-del="${idx}">Delete</button>
+      `;
+      list.appendChild(row);
+    });
+    list.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-del'));
+        const cols = loadCollections();
+        cols.splice(idx, 1);
+        saveCollections(cols);
+        recordActivity('Deleted collection');
+        renderCollections();
+      });
+    });
+  }
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const cols = loadCollections();
+      cols.push({ name: name.value.trim(), desc: desc.value.trim(), cover: cover.value.trim() });
+      saveCollections(cols);
+      recordActivity('Created collection');
+      renderCollections();
+      name.value = '';
+      desc.value = '';
+      cover.value = '';
+    });
+    const reset = document.getElementById('collectionReset');
+    if (reset) reset.addEventListener('click', () => { name.value=''; desc.value=''; cover.value=''; });
+  }
+}
+
+function renderInventory() {
+  const table = document.getElementById('inventoryTable');
+  const alertBox = document.getElementById('lowStockAlerts');
+  if (!table) return;
+  const products = loadProducts();
+  table.innerHTML = '';
+  let lowCount = 0;
+  products.forEach(p => {
+    const vs = Array.isArray(p.variants) ? p.variants : [];
+    vs.forEach((v, idx) => {
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-6 gap-3 items-center border rounded-lg p-3';
+      row.innerHTML = `
+        <div class="col-span-2">${p.name}</div>
+        <div>${v.size}</div>
+        <div>${v.color}</div>
+        <input type="number" min="0" class="border rounded px-2 py-1 w-24" value="${Number(v.stock)||0}" data-stock="${p.id}:${idx}" />
+        <div>${(Number(v.stock)||0) <= 2 ? 'Low' : 'OK'}</div>
+      `;
+      table.appendChild(row);
+      if ((Number(v.stock)||0) <= 2) lowCount += 1;
+    });
+  });
+  if (alertBox) alertBox.textContent = lowCount ? `${lowCount} low stock alerts` : '';
+  table.querySelectorAll('[data-stock]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const key = inp.getAttribute('data-stock');
+      const [pid, vidx] = key.split(':');
+      const products = loadProducts();
+      const p = products.find(x => x.id === pid);
+      if (!p) return;
+      const vs = Array.isArray(p.variants) ? p.variants : [];
+      const v = vs[Number(vidx)];
+      if (!v) return;
+      v.stock = Number(inp.value || '0');
+      saveProducts(products);
+      recordActivity('Updated stock');
+      renderInventory();
+    });
+  });
+  const exportBtn = document.getElementById('exportInventory');
+  if (exportBtn) exportBtn.addEventListener('click', () => exportJSON('inventory.json', products));
+}
+
+function renderOrders() {
+  const table = document.getElementById('ordersTable');
+  const search = document.getElementById('orderSearch');
+  const filter = document.getElementById('orderFilter');
+  const exportBtn = document.getElementById('ordersExportCsv');
+  if (!table) return;
+  const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+  const apply = () => {
+    const q = (search && search.value || '').toLowerCase();
+    const f = filter && filter.value || '';
+    const rows = orders.filter(o => (!q || String(o.id).toLowerCase().includes(q)) && (!f || o.status === f));
+    table.innerHTML = '';
+    rows.forEach((o, idx) => {
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-6 gap-3 items-center border rounded-lg p-3';
+      row.innerHTML = `
+        <div>${o.id}</div>
+        <div class="col-span-2">${formatCurrency(o.total)}</div>
+        <div>${o.status}</div>
+        <button class="px-3 py-2 rounded border" data-print="${idx}">Print</button>
+        <select class="border rounded px-2 py-2" data-status="${idx}"><option${o.status==='Pending'?' selected':''}>Pending</option><option${o.status==='Packed'?' selected':''}>Packed</option><option${o.status==='Delivered'?' selected':''}>Delivered</option></select>
+      `;
+      table.appendChild(row);
+    });
+    table.querySelectorAll('[data-status]').forEach(sel => {
+      sel.addEventListener('change', () => {
+        const idx = Number(sel.getAttribute('data-status'));
+        orders[idx].status = sel.value;
+        localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+        recordActivity('Updated order status');
+        apply();
+      });
+    });
+    table.querySelectorAll('[data-print]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-print'));
+        const o = orders[idx];
+        const w = window.open('', '_blank');
+        if (!w) return;
+        w.document.write(`<pre>${JSON.stringify(o, null, 2)}</pre>`);
+        w.document.close();
+        w.focus();
+      });
+    });
+  };
+  apply();
+  if (search) search.addEventListener('input', apply);
+  if (filter) filter.addEventListener('change', apply);
+  if (exportBtn) exportBtn.addEventListener('click', () => exportCSV('orders.csv', orders));
+}
+
+function renderCustomers() {
+  const table = document.getElementById('customersTable');
+  const search = document.getElementById('customerSearch');
+  if (!table) return;
+  const customers = JSON.parse(localStorage.getItem(CUSTOMERS_KEY) || '[]');
+  const apply = () => {
+    const q = (search && search.value || '').toLowerCase();
+    const rows = customers.filter(c => !q || (c.name||'').toLowerCase().includes(q));
+    table.innerHTML = '';
+    rows.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-6 gap-3 items-center border rounded-lg p-3';
+      row.innerHTML = `
+        <div class="col-span-2">${c.name||''}</div>
+        <div>${c.email||''}</div>
+        <div>${c.phone||''}</div>
+        <div>${formatCurrency(c.total||0)}</div>
+        <div>${c.last_purchase||''}</div>
+      `;
+      table.appendChild(row);
+    });
+  };
+  apply();
+  if (search) search.addEventListener('input', apply);
+  const exportBtn = document.getElementById('customersExportCsv');
+  if (exportBtn) exportBtn.addEventListener('click', () => exportCSV('customers.csv', customers));
+}
+
+function renderPromotions() {
+  const form = document.getElementById('promoForm');
+  const list = document.getElementById('promotionsList');
+  const code = document.getElementById('promoCode');
+  const disc = document.getElementById('promoDiscount');
+  const exp = document.getElementById('promoExpiry');
+  const promos = JSON.parse(localStorage.getItem(PROMOS_KEY) || '[]');
+  const renderList = () => {
+    if (!list) return;
+    list.innerHTML = '';
+    promos.forEach((p, idx) => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-3 border rounded-lg p-3';
+      row.innerHTML = `
+        <div class="flex-1">${p.code} • ${p.discount}%</div>
+        <div>${p.expiry||''}</div>
+        <button class="px-3 py-2 rounded border text-red-600" data-del="${idx}">Delete</button>
+      `;
+      list.appendChild(row);
+    });
+    list.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-del'));
+        promos.splice(idx, 1);
+        localStorage.setItem(PROMOS_KEY, JSON.stringify(promos));
+        recordActivity('Deleted promotion');
+        renderList();
+      });
+    });
+  };
+  renderList();
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      promos.push({ code: code.value.trim(), discount: Number(disc.value||'0'), expiry: exp.value });
+      localStorage.setItem(PROMOS_KEY, JSON.stringify(promos));
+      recordActivity('Created promotion');
+      code.value=''; disc.value=''; exp.value='';
+      renderList();
+    });
+    const reset = document.getElementById('promoReset');
+    if (reset) reset.addEventListener('click', () => { code.value=''; disc.value=''; exp.value=''; });
+  }
+}
+
+function renderMarketing() {
+  const list = document.getElementById('subscribersList');
+  const exportBtn = document.getElementById('subscribersExport');
+  if (!list) return;
+  const subs = JSON.parse(localStorage.getItem(SUBSCRIBERS_KEY) || '[]');
+  list.innerHTML = '';
+  subs.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-3 border rounded-lg p-3';
+    row.textContent = s.email || '';
+    list.appendChild(row);
+  });
+  if (exportBtn) exportBtn.addEventListener('click', () => exportCSV('subscribers.csv', subs));
+}
+
+function renderAnalytics() {
+  if (!window.Chart) return;
+  const ctx1 = document.getElementById('chartDailyViews');
+  const ctx2 = document.getElementById('chartProductPerf');
+  const ctx3 = document.getElementById('chartCartAdds');
+  const ctx4 = document.getElementById('chartTopProducts');
+  const events = JSON.parse(localStorage.getItem(ANALYTICS_KEY) || '[]');
+  const adds = events.filter(e => e.type === 'add_to_cart');
+  const byDay = {};
+  adds.forEach(e => {
+    const d = new Date(e.ts);
+    const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    byDay[key] = (byDay[key]||0)+1;
+  });
+  const labels = Object.keys(byDay).slice(-7);
+  const data = labels.map(l => byDay[l]);
+  if (ctx1) new Chart(ctx1, { type: 'bar', data: { labels, datasets: [{ label: 'Views', data, backgroundColor: '#d4af37' }] } });
+  const prods = loadProducts();
+  const perfLabels = prods.map(p => p.name).slice(0,6);
+  const perfData = perfLabels.map(() => Math.floor(Math.random()*10)+1);
+  if (ctx2) new Chart(ctx2, { type: 'bar', data: { labels: perfLabels, datasets: [{ label: 'Performance', data: perfData, backgroundColor: '#0a0a0a' }] } });
+  const cartLabels = labels;
+  const cartData = data;
+  if (ctx3) new Chart(ctx3, { type: 'line', data: { labels: cartLabels, datasets: [{ label: 'Cart Adds', data: cartData, borderColor: '#d4af37' }] } });
+  const topLabels = prods.map(p => p.name).slice(0,6);
+  const topData = topLabels.map(() => Math.floor(Math.random()*20)+5);
+  if (ctx4) new Chart(ctx4, { type: 'doughnut', data: { labels: topLabels, datasets: [{ data: topData, backgroundColor: ['#d4af37','#0a0a0a','#1a1a1a','#f8f5ef','#999','#555'] }] } });
+}
+
+function renderSettings() {
+  const form = document.getElementById('settingsForm');
+  if (!form) return;
+  const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+  const storeName = document.getElementById('storeName');
+  const colorGold = document.getElementById('colorGold');
+  const colorBlack = document.getElementById('colorBlack');
+  const colorIvory = document.getElementById('colorIvory');
+  const contactEmail = document.getElementById('contactEmail');
+  const instagramLink = document.getElementById('instagramLink');
+  const youtubeLink = document.getElementById('youtubeLink');
+  const adminPassChange = document.getElementById('adminPassChange');
+  const sessionTimeout = document.getElementById('sessionTimeout');
+  if (storeName) storeName.value = s.storeName || '';
+  if (colorGold) colorGold.value = s.colorGold || '#d4af37';
+  if (colorBlack) colorBlack.value = s.colorBlack || '#0a0a0a';
+  if (colorIvory) colorIvory.value = s.colorIvory || '#f8f5ef';
+  if (contactEmail) contactEmail.value = s.contactEmail || '';
+  if (instagramLink) instagramLink.value = s.instagramLink || '';
+  if (youtubeLink) youtubeLink.value = s.youtubeLink || '';
+  if (adminPassChange) adminPassChange.value = '';
+  if (sessionTimeout) sessionTimeout.value = s.sessionTimeout || 30;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const payload = {
+      storeName: storeName && storeName.value || '',
+      colorGold: colorGold && colorGold.value || '#d4af37',
+      colorBlack: colorBlack && colorBlack.value || '#0a0a0a',
+      colorIvory: colorIvory && colorIvory.value || '#f8f5ef',
+      contactEmail: contactEmail && contactEmail.value || '',
+      instagramLink: instagramLink && instagramLink.value || '',
+      youtubeLink: youtubeLink && youtubeLink.value || '',
+      sessionTimeout: sessionTimeout && Number(sessionTimeout.value||'30') || 30,
+    };
+    const pass = adminPassChange && adminPassChange.value || '';
+    if (pass) localStorage.setItem('lafamilia_admin_pass', pass);
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(payload));
+    recordActivity('Updated settings');
+  });
+  const exportBtn = document.getElementById('settingsExport');
+  if (exportBtn) exportBtn.addEventListener('click', () => exportJSON('settings.json', JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}')));
+  const resetBtn = document.getElementById('settingsResetAll');
+  if (resetBtn) resetBtn.addEventListener('click', () => {
+    localStorage.clear();
+    recordActivity('Reset all data');
+    window.location.reload();
+  });
+}
+
+function exportCSV(filename, rows) {
+  const headers = Object.keys(rows[0]||{});
+  const lines = [headers.join(',')].concat(rows.map(r => headers.map(h => JSON.stringify(r[h]||'')).join(',')));
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportJSON(filename, obj) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 function initProductAccordion() {
   document.querySelectorAll('.accordion-trigger').forEach(btn => {
@@ -952,6 +1367,7 @@ function duplicateProduct(id) {
   const copy = { ...p, id: newId };
   products.push(copy);
   saveProducts(products);
+  recordActivity(`Duplicated product ${id} -> ${newId}`);
   renderAdminProducts();
 }
 
